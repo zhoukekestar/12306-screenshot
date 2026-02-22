@@ -5,6 +5,7 @@ export interface TicketInfo {
   seat: string;
   departureStation: string;
   arrivalStation: string;
+  ticketGate: string;
 }
 
 export function parseTicketText(text: string): TicketInfo {
@@ -15,6 +16,7 @@ export function parseTicketText(text: string): TicketInfo {
     seat: '',
     departureStation: '',
     arrivalStation: '',
+    ticketGate: '',
   };
 
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
@@ -77,7 +79,13 @@ export function parseTicketText(text: string): TicketInfo {
     }
   }
 
-  // 4. 全局 fallback (如果前面的强关联特征失效，再进行全局正则盲抓)
+  // 4. 提取检票口 (特征：“检票口 1” 或 “检票口12A”)
+  const gateMatch = noSpaceText.match(/检票口([a-zA-Z0-9]+)/i);
+  if (gateMatch) {
+    result.ticketGate = gateMatch[1].toUpperCase();
+  }
+
+  // 5. 全局 fallback (如果前面的强关联特征失效，再进行全局正则盲抓)
   // 匹配车次，但过滤掉“订单号”开头，避免误抓订单号如 E479513942
   if (!result.trainNumber) {
     const safeText = noSpaceText.replace(/订单号[:：A-Za-z0-9]+/g, '');

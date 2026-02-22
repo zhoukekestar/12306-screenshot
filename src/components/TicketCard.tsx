@@ -127,6 +127,22 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
           </div>
 
           <div className="flex justify-between items-center bg-gray-50 p-4 rounded-2xl gap-4">
+            <span className="text-xl text-gray-500 font-medium shrink-0 whitespace-nowrap">检票口</span>
+            <div className="flex-1 min-w-0 flex justify-end">
+              {isEditing ? (
+                <input 
+                  className="w-full max-w-[200px] text-right text-2xl sm:text-3xl font-black text-blue-600 border-b border-blue-300 focus:outline-none bg-transparent py-0.5" 
+                  value={info.ticketGate} 
+                  onChange={e => handleChange(e, 'ticketGate')}
+                  placeholder="检票口"
+                />
+              ) : (
+                <div className="text-right text-2xl sm:text-3xl font-black text-blue-600 break-words leading-tight">{info.ticketGate || '--'}</div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center bg-gray-50 p-4 rounded-2xl gap-4">
             <span className="text-xl text-gray-500 font-medium shrink-0 whitespace-nowrap">座位号</span>
             <div className="flex-1 min-w-0 flex justify-end">
               {isEditing ? (
