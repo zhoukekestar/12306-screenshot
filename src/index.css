@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+    /* 阻止移动端双击缩放和过度滚动 */
+    touch-action: pan-y;
+    overscroll-behavior-y: none;
+  }
+}
