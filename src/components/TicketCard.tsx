@@ -163,11 +163,6 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
             </div>
           </div>
         </div>
-        
-        {/* 底部提示语 */}
-        <div className="mt-8 text-center text-gray-400 text-sm font-medium">
-          请提前到达检票口等候
-        </div>
       </div>
 
       {/* 极简超大保存按钮 */}
@@ -179,11 +174,6 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
         <Download size={32} strokeWidth={2.5}/>
         保存到相册
       </button>
-      
-      {/* 底部温馨提示 */}
-      <p className="mt-6 text-gray-500 text-lg font-medium">
-        直接向工作人员展示此卡片即可
-      </p>
     </div>
   );
 }

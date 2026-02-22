@@ -130,13 +130,13 @@ function App() {
           </div>
 
           {/* 底部温馨提示 (适老化超大字体) */}
-          {!isProcessing && (
+          {/* !isProcessing && (
             <div className="mt-12 text-center px-4">
               <p className="text-lg text-gray-500 font-medium leading-relaxed">
                 请上传包含车次和座位的<br/><strong className="text-gray-700">12306 官方订单截图</strong>
               </p>
             </div>
-          )}
+          ) */}
         </div>
       )}
     </div>
