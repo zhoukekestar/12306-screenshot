@@ -28,7 +28,7 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: keyof TicketInfo) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof TicketInfo) => {
     setInfo(prev => ({ ...prev, [key]: e.target.value }));
   };
 
@@ -68,7 +68,7 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
               />
             ) : (
               <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
-                {info.departureStation || '未知站'}
+                {info.departureStation || '--'}
               </div>
             )}
           </div>
@@ -83,7 +83,11 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
                   placeholder="车次"
                 />
               ) : (
-                <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber || '未知车次'}</span>
+                info.trainNumber ? (
+                  <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber}</span>
+                ) : (
+                  <span className="text-2xl text-blue-400 bg-gray-50 px-3 py-1 rounded-full border border-dashed border-gray-300">--</span>
+                )
               )}
             </div>
             <div className="w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full my-2 relative">
@@ -101,7 +105,7 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
               />
             ) : (
               <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
-                {info.arrivalStation || '未知站'}
+                {info.arrivalStation || '--'}
               </div>
             )}
           </div>
@@ -119,7 +123,7 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
                 </>
               ) : (
                 <>
-                  <span className="text-xl text-gray-600 font-bold mb-1 truncate max-w-full">{info.date || '未知日期'}</span>
+                  <span className="text-xl text-gray-600 font-bold mb-1 truncate max-w-full">{info.date || '--'}</span>
                   <span className="text-4xl sm:text-5xl font-black text-red-600 tracking-tight">{info.time || '--:--'}</span>
                 </>
               )}
@@ -146,14 +150,15 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
             <span className="text-xl text-gray-500 font-medium shrink-0 whitespace-nowrap">座位号</span>
             <div className="flex-1 min-w-0 flex justify-end">
               {isEditing ? (
-                <input 
-                  className="w-full max-w-[200px] text-right text-2xl sm:text-3xl font-black text-gray-900 border-b border-blue-300 focus:outline-none bg-transparent py-0.5" 
+                <textarea 
+                  className="w-full max-w-[200px] text-right text-2xl sm:text-3xl font-black text-gray-900 border-b border-blue-300 focus:outline-none bg-transparent py-0.5 resize-none overflow-hidden" 
                   value={info.seat} 
                   onChange={e => handleChange(e, 'seat')}
                   placeholder="座位号"
+                  rows={info.seat ? info.seat.split('\n').length : 1}
                 />
               ) : (
-                <div className="text-right text-2xl sm:text-3xl font-black text-gray-900 break-words leading-tight">{info.seat || '无座'}</div>
+                <div className="text-right text-2xl sm:text-3xl font-black text-gray-900 break-words leading-tight whitespace-pre-line">{info.seat || '--'}</div>
               )}
             </div>
           </div>

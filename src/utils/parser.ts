@@ -40,11 +40,20 @@ export function parseTicketText(text: string): TicketInfo {
     result.date = rawDate.replace(/\./g, '-').replace('年', '-').replace('月', '-').replace('日', '');
   }
 
-  // 2. 提取座位号 (处理多人订单，提取并拼接：10车08B号, 10车08A号)
-  const seatMatches = [...noSpaceText.matchAll(/\d{1,2}车\d{1,3}[A-Z]?号/gi)];
+  // 2. 提取座位号 (处理多人订单，提取并换行拼接，格式转换：10车08B号 -> 10车08排B号)
+  const seatMatches = [...noSpaceText.matchAll(/(\d{1,2})车(\d{1,3})([A-Z]?)号?/gi)];
   if (seatMatches.length > 0) {
-    const uniqueSeats = Array.from(new Set(seatMatches.map(m => m[0].toUpperCase())));
-    result.seat = uniqueSeats.join(', ');
+    const formattedSeats = seatMatches.map(m => {
+      const car = m[1];
+      const row = m[2];
+      const seatChar = m[3] ? m[3].toUpperCase() : '';
+      if (seatChar) {
+        return `${car}车${row}排${seatChar}号`;
+      }
+      return `${car}车${row}号`;
+    });
+    const uniqueSeats = Array.from(new Set(formattedSeats));
+    result.seat = uniqueSeats.join('\n');
   }
 
   // 3. 逐行分析强关联特征 (时间段、车次段、历时/站点段)
