@@ -57,59 +57,66 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
         className="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-6 sm:p-8"
       >
         {/* 顶部：站点信息 */}
-        <div className="flex justify-between items-center mb-8 border-b-2 border-dashed border-gray-200 pb-8 gap-2">
-          <div className="flex-1 min-w-0 text-center">
-            {isEditing ? (
+        {isEditing ? (
+          /* 编辑模式：竖向排列，每个字段独占一行，避免手机上被挤压 */
+          <div className="flex flex-col gap-3 mb-8 border-b-2 border-dashed border-gray-200 pb-8">
+            <div className="flex items-center gap-2">
+              <span className="text-base text-gray-400 font-medium shrink-0 w-16 text-right">出发站</span>
               <input 
-                className="w-full min-w-0 text-center text-3xl sm:text-4xl font-black text-gray-900 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-1 transition-colors" 
+                className="flex-1 min-w-0 text-center text-2xl font-black text-gray-900 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-1 transition-colors" 
                 value={info.departureStation} 
                 onChange={e => handleChange(e, 'departureStation')}
                 placeholder="出发站"
               />
-            ) : (
-              <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
-                {info.departureStation || '--'}
-              </div>
-            )}
-          </div>
-          
-          <div className="flex flex-col items-center justify-center shrink-0 px-2">
-            <div className="text-gray-400 font-bold mb-1 text-sm tracking-widest">
-              {isEditing ? (
-                <input 
-                  className="w-full min-w-[80px] text-center text-xl font-bold text-blue-600 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-0.5" 
-                  value={info.trainNumber} 
-                  onChange={e => handleChange(e, 'trainNumber')}
-                  placeholder="车次"
-                />
-              ) : (
-                info.trainNumber ? (
-                  <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber}</span>
-                ) : (
-                  <span className="text-2xl text-blue-400 bg-gray-50 px-3 py-1 rounded-full border border-dashed border-gray-300">--</span>
-                )
-              )}
             </div>
-            <div className="w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full my-2 relative">
-               <div className="absolute right-0 -top-1.5 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0 text-center">
-            {isEditing ? (
+            <div className="flex items-center gap-2">
+              <span className="text-base text-gray-400 font-medium shrink-0 w-16 text-right">车次</span>
               <input 
-                className="w-full min-w-0 text-center text-3xl sm:text-4xl font-black text-gray-900 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-1 transition-colors" 
+                className="flex-1 min-w-0 text-center text-2xl font-bold text-blue-600 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-1" 
+                value={info.trainNumber} 
+                onChange={e => handleChange(e, 'trainNumber')}
+                placeholder="车次"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-base text-gray-400 font-medium shrink-0 w-16 text-right">到达站</span>
+              <input 
+                className="flex-1 min-w-0 text-center text-2xl font-black text-gray-900 border-b-2 border-blue-400 focus:outline-none bg-blue-50/50 rounded py-1 transition-colors" 
                 value={info.arrivalStation} 
                 onChange={e => handleChange(e, 'arrivalStation')}
                 placeholder="到达站"
               />
-            ) : (
+            </div>
+          </div>
+        ) : (
+          /* 展示模式：横向三列布局 */
+          <div className="flex justify-between items-center mb-8 border-b-2 border-dashed border-gray-200 pb-8 gap-2">
+            <div className="flex-1 min-w-0 text-center">
+              <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
+                {info.departureStation || '--'}
+              </div>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center shrink-0 px-2">
+              <div className="text-gray-400 font-bold mb-1 text-sm tracking-widest">
+                {info.trainNumber ? (
+                  <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber}</span>
+                ) : (
+                  <span className="text-2xl text-blue-400 bg-gray-50 px-3 py-1 rounded-full border border-dashed border-gray-300">--</span>
+                )}
+              </div>
+              <div className="w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full my-2 relative">
+                 <div className="absolute right-0 -top-1.5 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0 text-center">
               <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
                 {info.arrivalStation || '--'}
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 核心信息区 */}
         <div className="flex flex-col gap-6">
