@@ -31,9 +31,9 @@ function App() {
           }
         },
         // 使用 zstatic.net 国内 CDN 加速，替代默认的 cdn.jsdelivr.net
-        // workerPath: './worker.min.js',
-        // corePath: './',
-        // langPath: './',
+        workerPath: './worker.min.js',
+        corePath: './',
+        langPath: './',
       });
 
       // 3. Run OCR
