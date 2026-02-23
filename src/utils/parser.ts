@@ -22,13 +22,13 @@ export function parseTicketText(text: string): TicketInfo {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const noSpaceText = text.replace(/[\s\n]+/g, '');
 
-  // 1. 提取日期 (跳过“下单时间”，优先找“发车时间”后的日期)
+  // 1. 提取日期 (跳过"下单时间"，优先找"发车时间"后的日期)
   let rawDate = '';
   const specificDateMatch = noSpaceText.match(/发车时间.*?[:：]?(20\d{2}[-年.]\d{1,2}[-月.]\d{1,2}日?)/);
   if (specificDateMatch) {
     rawDate = specificDateMatch[1];
   } else {
-    // 若找不到“发车时间”标识，找所有符合特征的日期（通常第二个是发车日期）
+    // 若找不到"发车时间"标识，找所有符合特征的日期（通常第二个是发车日期）
     const allDates = [...noSpaceText.matchAll(/20\d{2}[-年.]\d{1,2}[-月.]\d{1,2}日?/g)];
     if (allDates.length > 1) {
       rawDate = allDates[1][0];
@@ -56,11 +56,11 @@ export function parseTicketText(text: string): TicketInfo {
     result.seat = uniqueSeats.join('\n');
   }
 
-  // 3. 逐行分析强关联特征 (时间段、车次段、历时/站点段)
+  // 3. 逐行分析强关联特征 (时间段、历时/站点段)
   for (const line of lines) {
     const cleanLine = line.replace(/\s+/g, '');
 
-    // 匹配站点 (特征：“出发站，历时53分到达站”)
+    // 匹配站点 (特征："出发站，历时53分到达站")
     if (cleanLine.includes('历时')) {
       const stationMatch = cleanLine.match(/(.+?)[,，]?历时\d+分(.+?)[,，]?$/);
       if (stationMatch) {
@@ -69,40 +69,23 @@ export function parseTicketText(text: string): TicketInfo {
       }
     }
 
-    // 匹配时间和车次 (特征：夹在两个时间之间的通常是车次，例如 “09:10sso10:03” 或是 “10:32e7712，1116”)
+    // 匹配发车时间 (特征：夹在两个时间之间的内容，例如 "09:10sso10:03")
+    // 车次识别准确率较低，OCR后不自动填入，留空由用户手动输入
     const timeTrainMatch = cleanLine.match(/(\d{2}:\d{2})([a-zA-Z0-9，,]+?)(\d{2}:\d{2}|\d{4})/);
     if (timeTrainMatch) {
       if (!result.time) {
         result.time = timeTrainMatch[1]; // 选取第一个时间作为出发时间
       }
-      
-      const middleText = timeTrainMatch[2].replace(/[,，]/g, '').toUpperCase();
-      // 判断中间的内容是否像正常车次 (如 E7712)
-      const validTrainMatch = middleText.match(/[A-Z]\d{2,4}/);
-      if (validTrainMatch) {
-        result.trainNumber = validTrainMatch[0];
-      } else if (!result.trainNumber && middleText.length >= 2) {
-        // 如果OCR识别错乱（例如把G认成sso），也将错就错提取出来，后续供用户手动修改
-        result.trainNumber = middleText;
-      }
     }
   }
 
-  // 4. 提取检票口 (特征：“检票口 1” 或 “检票口12A”)
+  // 4. 提取检票口 (特征："检票口 1" 或 "检票口12A")
   const gateMatch = noSpaceText.match(/检票口([a-zA-Z0-9]+)/i);
   if (gateMatch) {
     result.ticketGate = gateMatch[1].toUpperCase();
   }
 
-  // 5. 全局 fallback (如果前面的强关联特征失效，再进行全局正则盲抓)
-  // 匹配车次，但过滤掉“订单号”开头，避免误抓订单号如 E479513942
-  if (!result.trainNumber) {
-    const safeText = noSpaceText.replace(/订单号[:：A-Za-z0-9]+/g, '');
-    const trainMatch = safeText.match(/[A-Za-z]\d{2,4}/);
-    if (trainMatch) {
-      result.trainNumber = trainMatch[0].toUpperCase();
-    }
-  }
+  // 5. 车次识别准确率低，不做 fallback 兜底，trainNumber 始终留空由用户手动填写
 
   // 匹配全局时间 (避开顶部手机状态栏时间)
   if (!result.time) {

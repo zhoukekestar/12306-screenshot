@@ -98,13 +98,11 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
             </div>
             
             <div className="flex flex-col items-center justify-center shrink-0 px-2">
-              <div className="text-gray-400 font-bold mb-1 text-sm tracking-widest">
-                {info.trainNumber ? (
+              {info.trainNumber && (
+                <div className="text-gray-400 font-bold mb-1 text-sm tracking-widest">
                   <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber}</span>
-                ) : (
-                  <span className="text-2xl text-blue-400 bg-gray-50 px-3 py-1 rounded-full border border-dashed border-gray-300">--</span>
-                )}
-              </div>
+                </div>
+              )}
               <div className="w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full my-2 relative">
                  <div className="absolute right-0 -top-1.5 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
               </div>
