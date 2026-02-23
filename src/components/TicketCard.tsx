@@ -92,24 +92,26 @@ export default function TicketCard({ initialInfo, onReset }: TicketCardProps) {
           /* 展示模式：横向三列布局 */
           <div className="flex justify-between items-center mb-8 border-b-2 border-dashed border-gray-200 pb-8 gap-2">
             <div className="flex-1 min-w-0 text-center">
-              <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
+              <div className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
                 {info.departureStation || '--'}
               </div>
             </div>
             
-            <div className="flex flex-col items-center justify-center shrink-0 px-2">
+            <div className="flex flex-col items-center justify-center shrink-0 px-2 min-w-[80px]">
               {info.trainNumber && (
-                <div className="text-gray-400 font-bold mb-1 text-sm tracking-widest">
+                <div className="mb-1">
                   <span className="text-2xl text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{info.trainNumber}</span>
                 </div>
               )}
-              <div className="w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full my-2 relative">
-                 <div className="absolute right-0 -top-1.5 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
+              <div className="w-full flex items-center">
+                <div className="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shrink-0"></div>
+                <div className="flex-1 h-1 bg-gradient-to-r from-blue-300 to-blue-500"></div>
+                <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shrink-0"></div>
               </div>
             </div>
 
             <div className="flex-1 min-w-0 text-center">
-              <div className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
+              <div className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight break-words">
                 {info.arrivalStation || '--'}
               </div>
             </div>
